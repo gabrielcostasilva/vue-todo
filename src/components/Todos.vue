@@ -7,45 +7,45 @@
       placeholder="Add a new todo ..."
     />
 
-  <div v-if="todos.length">
-    <ul>
-      <li v-for="todo in todos" :key="todo.id" @click="deleteTodo(todo.id)">
-        {{ todo.text }}
-      </li>
-    </ul>
-  </div>
-  <div v-else>Woohoo, nothing left todo!</div>
+    <div v-if="todos.length">
+      <ul>
+        <li v-for="todo in todos" :key="todo.id" @click="deleteTodo(todo.id)">
+          {{ todo.text }}
+        </li>
+      </ul>
+    </div>
+    <div v-else>Woohoo, nothing left todo!</div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref } from 'vue'
 export default {
   setup(props, { emit }) {
     const todos = ref([
-      { text: "make the bed", id: 1 },
-      { text: "play video games", id: 2 },
-    ]);
+      { text: 'make the bed', id: 1 },
+      { text: 'play video games', id: 2 },
+    ])
 
-    const newTodo = ref("");
+    const newTodo = ref('')
 
     const addTodo = () => {
       if (newTodo.value) {
-        const id = Math.random();
-        todos.value = [{ text: newTodo.value, id }, ...todos.value];
-        newTodo.value = "";
+        const id = Math.random()
+        todos.value = [{ text: newTodo.value, id }, ...todos.value]
+        newTodo.value = ''
       } else {
-        emit("badValue");
+        emit('badValue')
       }
-    };
+    }
 
     const deleteTodo = (id) => {
-      todos.value = todos.value.filter((todo) => todo.id != id);
-    };
+      todos.value = todos.value.filter((todo) => todo.id != id)
+    }
 
-    return { newTodo, addTodo, todos, deleteTodo };
+    return { newTodo, addTodo, todos, deleteTodo }
   },
-};
+}
 </script>
 
 <style>
