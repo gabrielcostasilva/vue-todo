@@ -7,14 +7,16 @@
       placeholder="Add a new todo ..."
     />
 
-    <div v-if="todos.length">
-      <ul>
-        <li v-for="todo in todos" :key="todo.id" @click="deleteTodo(todo.id)">
-          {{ todo.text }}
-        </li>
-      </ul>
-    </div>
-    <div v-else>Woohoo, nothing left todo!</div>
+    <transition name="switch" mode="out-in">
+      <div v-if="todos.length">
+        <transition-group tag="ul" name="list" appear>
+          <li v-for="todo in todos" :key="todo.id" @click="deleteTodo(todo.id)">
+            {{ todo.text }}
+          </li>
+        </transition-group>
+      </div>
+      <div v-else>Woohoo, nothing left todo!</div>
+    </transition>
   </div>
 </template>
 
