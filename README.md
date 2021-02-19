@@ -9,6 +9,12 @@ Please note that the master branch does not implement the animations, although S
 
 <img src="./pics/MainPage.png" />
 
+This app is a TODO app. It enables adding and removing TODOS from a list. The top of the main screen shows three links:
+
+* _Home_ that is the main page;
+* _About_ that is a simple page with textual info;
+* _Contact_ that has some icons use to demonstate animations in the original project used by Shaun in his tutorial.
+
 ### Adding New TODO
 
 <img src="./pics/AddingTODO1.png" />
