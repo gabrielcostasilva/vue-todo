@@ -1,7 +1,7 @@
 # Vue Todo
 This project is based on [Shaun Pelling tutorial on Vue Animations](https://www.youtube.com/watch?v=RIApQjn9fvw&list=PL4cUxeGkcC9ghm7-iTfS9n468Kp7l9Ipu).
 
-**This branch fully implements Shaun's animations as they are presented in his tutorial.**
+**Notice this branch replaces a few CSS manually created transitions with animate.css library.**
 
 ## Project Overview
 
@@ -52,3 +52,5 @@ Apart from the `Home.vue`, the other two _Views_ consists of pure text. The `Hom
 ## Dependencies
 
 The original project has no additional dependency other than the Vue Router.
+
+However, this branch uses animate.css library to replace a few transitions. Therefore, it must be added as a dependency.

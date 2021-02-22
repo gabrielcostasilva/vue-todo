@@ -5,7 +5,14 @@
     <router-link to="/contact">Contact</router-link>
   </div>
   <router-view v-slot="{ Component }">
-    <transition name="route" mode="out-in">
+    <transition 
+      name="route" 
+      mode="out-in"
+      enter-class="animate__animated animate__backInDown"
+      enter-active-class="animate__animated animate__bounceIn"
+      leave-active-class="animate__animated animate__bounceOut"
+      leave-to-class="animate__animated animate__backOutRight"
+      >
       <component :is="Component" />
     </transition>
   </router-view>
@@ -28,21 +35,5 @@ body {
 }
 #nav a.router-link-exact-active {
   color: #42b983;
-}
-
-/* route transitions */
-.route-enter-from {
-  opacity: 0;
-  transform: translateX(100px);
-}
-.route-enter-active {
-  transition: all 0.3s ease-out; 
-}
-.route-leave-to {
-  opacity: 0;
-  transform: translateX(-100px);
-}
-.route-leave-active {
-  transition: all 0.3s ease-in; 
 }
 </style>
