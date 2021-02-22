@@ -1,8 +1,7 @@
 # Vue Todo
 This project is based on [Shaun Pelling tutorial on Vue Animations](https://www.youtube.com/watch?v=RIApQjn9fvw&list=PL4cUxeGkcC9ghm7-iTfS9n468Kp7l9Ipu).
 
-Please note that the master branch does not implement the animations, although Shaun's tutorial is all about Vue transitions. This repository has another branch dedicated to implementing transitions.
-
+**This branch uses json-server to providing data access via REST calls.**
 ## Project Overview
 
 ### Main Screen
@@ -52,3 +51,4 @@ Apart from the `Home.vue`, the other two _Views_ consists of pure text. The `Hom
 ## Dependencies
 
 The original project has no additional dependency other than the Vue Router.
+However, this branch uses json-server to providing acess to data via REST calls. This simulates a call to a back-end.
