@@ -21,30 +21,33 @@
 <script>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import Localbase from 'localbase'
 
 export default {
   setup(props, { emit }) {
     const todos = ref([])
     const router = useRouter()
+    let db = null
 
     onMounted(() => {
-      fetch('http://localhost:3000/todos')
-        .then((response) => response.json())
-        .then((data) => (todos.value = data))
-        .catch((err) => console.log('Error!'))
+      
+      db = new Localbase('todo-db')
+
+      db.collection('todos')
+        .get()
+        .then((response) => (todos.value = response))
     })
 
     const newTodo = ref('')
 
     const addTodo = () => {
       if (newTodo.value) {
-        fetch('http://localhost:3000/todos', {
-          method: 'POST',
-          headers: { 'Content-type': 'application/json' },
-          body: JSON.stringify({ text: newTodo.value }),
-        })
-          .then(() => router.go()) // Notice we are forcing a reload here. Perhaps, not the best approach ...
-          .catch((err) => console.log(err))
+        db.collection('todos')
+          .add({
+            id: Date.now().toString(),
+            text: newTodo.value,
+          })
+          .then(() => router.go())
 
         newTodo.value = ''
       } else {
@@ -54,9 +57,10 @@ export default {
 
     const deleteTodo = (id) => {
       if (id) {
-        fetch(`http://localhost:3000/todos/${id}`, { method: 'DELETE' })
-        .then(() => todos.value = todos.value.filter((todo) => todo.id != id)) // Notice here we use a different approach by updating the local list. This avoids reloading the page.
-        .catch(err => console.log(err))
+        db.collection('todos')
+          .doc({ id })
+          .delete()
+          .then(() => router.go())
       }
     }
 

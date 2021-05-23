@@ -1,54 +1,48 @@
 # Vue Todo
 This project is based on [Shaun Pelling tutorial on Vue Animations](https://www.youtube.com/watch?v=RIApQjn9fvw&list=PL4cUxeGkcC9ghm7-iTfS9n468Kp7l9Ipu).
 
-**This branch uses json-server to providing data access via REST calls.**
-## Project Overview
 
-### Main Screen
+## Changes in this Branch
 
-<img src="./pics/MainPage.png" />
+This branch replaces the JSON-based data fetch API with the local IndexedDB approach. The previous code used the `fetch` command along with `json-server` to fetch data from a REST-based API. You can check the diff to see details.
 
-This app is a TODO app. It enables adding and removing TODOS from a list. The top of the main screen shows three links. At the center of the page, there is the data input, where the user writes down their TODO. The bottom of the screen shows the TODO list. Newest TODOS are listed first.
+The current code uses [`Localbase` library](https://github.com/dannyconnell/localbase) to manage data directly from the browser IndexedDB. The library significantly reduces the effort for managing IndexedDB. The library is Promise-based instead of callback-based as the original IndexedDB library.
 
-### Adding New TODO
+Firstly, we created a variable that represents the DB. Then, the DB is initialised when the `TODO` component is mounted. This fetches existing data.
 
-<img src="./pics/AddingTODO1.png" />
+```
+let db = null
 
-Adding a new TODO is as simple as typing the TODO in the input text and hitting `Enter`.
+onMounted(() => {
+    
+    db = new Localbase('todo-db')
 
-<img src="./pics/AddingTODO2.png" />
+    db.collection('todos')
+    .get()
+    .then((response) => (todos.value = response))
+})
+```
 
-This will update the original TODO list by adding the new TODO on top of the stack.
+Next, we replaced the `POST` operation with `Localbase` `add()` method.
 
-### Removing Existing TODO
+```
+db.collection('todos')
+    .add({
+    id: Date.now().toString(),
+    text: newTodo.value,
+    })
+    .then(() => router.go())
+```
 
-<img src="./pics/RemovingTODO1.png" />
+Finally, we replaced the `DELETE` operation with `Localbase` `delete()` method.
 
-One can remove a TODO from the list by clicking on the TODO. 
-
-<img src="./pics/RemovingTODO2.png" />
-
-When all TODOS are removed, the message _Woohoo, nothing left todo!_ is shown.
-
-### About Page
-
-<img src="./pics/AboutPage.png" />
-
-This is a simple page with textual info. It is used in Shaun's tutorial to showcase transitions between pages.
-
-### Contact Page
-
-<img src="./pics/ContactPage.png" />
-
-This is also a simple page. The icons are strategically used for demonstating animations in the original project - used by Shaun in his tutorial.
-
-## Views and Components Overview
-
-<img src="./pics/ComponentTree.png" />
-
-Apart from the `Home.vue`, the other two _Views_ consists of pure text. The `Home.vue` groups two components: `Todos.vue` that is responsible for managing all TODO operations, and `Toast.vue` that is a mensage used when the user hits `Enter` in a blank input box.
+```
+db.collection('todos')
+    .doc({ id })
+    .delete()
+    .then(() => router.go())
+```
 
 ## Dependencies
 
-The original project has no additional dependency other than the Vue Router.
-However, this branch uses json-server to providing acess to data via REST calls. This simulates a call to a back-end.
+This branch introduces the [`Localbase`](https://github.com/dannyconnell/localbase) dependency, which is the library that eases the IndexedDB use. 
