@@ -1,1 +1,19 @@
+version: 0.2
 
+phases:
+  install:
+    commands:
+      - echo Entered the install phase...
+      - yarn upgrade
+      - yarn global add @vue/cli
+      - yarn global add @vue/cli-service
+  build:
+    commands:
+      - echo Entered the build phase ...
+      - yarn build
+  post_build:
+    commands:
+      - echo Entered the post_build phase...
+      - [ -d "./dist/" ] && echo "Directory exists."
+      - echo Build completed on `date`
+      
