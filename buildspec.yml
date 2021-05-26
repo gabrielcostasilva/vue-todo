@@ -15,4 +15,6 @@ phases:
     commands:
       - echo Entered the post_build phase...
       - echo Build completed on `date`
-      
+artifacts:
+  files:
+    - dist/**/*
