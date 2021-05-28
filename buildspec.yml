@@ -14,6 +14,7 @@ phases:
   post_build:
     commands:
       - echo Entered the post_build phase...
+      - rm -rf node_modules/ src/
       - mv dist/* .
       - echo Build completed on `date`
 artifacts:
