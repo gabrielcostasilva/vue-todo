@@ -28,9 +28,11 @@ export default {
     const router = useRouter()
 
     onMounted(() => {
-      fetch('http://localhost:3000/todos')
+      fetch('https://yfzivn2vy3.execute-api.us-east-1.amazonaws.com/dev/todo', {
+        headers: {'Origin': '*'}
+      })
         .then((response) => response.json())
-        .then((data) => (todos.value = data))
+        .then((data) => (todos.value = data.todos))
         .catch((err) => console.log('Error!'))
     })
 
@@ -38,9 +40,9 @@ export default {
 
     const addTodo = () => {
       if (newTodo.value) {
-        fetch('http://localhost:3000/todos', {
+        fetch('https://yfzivn2vy3.execute-api.us-east-1.amazonaws.com/dev/todo', {
           method: 'POST',
-          headers: { 'Content-type': 'application/json' },
+          headers: { 'Content-type': 'application/json', 'Origin': '*' },
           body: JSON.stringify({ text: newTodo.value }),
         })
           .then(() => router.go()) // Notice we are forcing a reload here. Perhaps, not the best approach ...
@@ -54,7 +56,7 @@ export default {
 
     const deleteTodo = (id) => {
       if (id) {
-        fetch(`http://localhost:3000/todos/${id}`, { method: 'DELETE' })
+        fetch(`https://yfzivn2vy3.execute-api.us-east-1.amazonaws.com/dev/todo/${id}`, { method: 'DELETE' })
         .then(() => todos.value = todos.value.filter((todo) => todo.id != id)) // Notice here we use a different approach by updating the local list. This avoids reloading the page.
         .catch(err => console.log(err))
       }
