@@ -8,4 +8,4 @@ This branch introduces the Amplify Datastore feature to save data off-line. We a
 
 ## Dependencies
 
-This branch add the `aws-amplify` dependency.
+This branch adds the `aws-amplify` dependency.
