@@ -10,7 +10,7 @@
     <div v-if="todos.length">
       <ul>
         <li v-for="todo in todos" :key="todo.id" @click="deleteTodo(todo.id)">
-          {{ todo.text }}
+          {{ todo.todo }}
         </li>
       </ul>
     </div>
@@ -21,47 +21,48 @@
 <script>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { DataStore } from '@aws-amplify/datastore'
+import { Todo } from '../models'
 
 export default {
   setup(props, { emit }) {
     const todos = ref([])
     const router = useRouter()
 
-    onMounted(() => {
-      fetch('http://localhost:3000/todos')
-        .then((response) => response.json())
-        .then((data) => (todos.value = data))
-        .catch((err) => console.log('Error!'))
+    const updateTodoList = async() => {
+      todos.value = await DataStore.query(Todo)
+    }
+
+    onMounted(async () => {
+      updateTodoList()
     })
 
     const newTodo = ref('')
 
-    const addTodo = () => {
+    const addTodo = async () => {
       if (newTodo.value) {
-        fetch('http://localhost:3000/todos', {
-          method: 'POST',
-          headers: { 'Content-type': 'application/json' },
-          body: JSON.stringify({ text: newTodo.value }),
-        })
-          .then(() => router.go()) // Notice we are forcing a reload here. Perhaps, not the best approach ...
-          .catch((err) => console.log(err))
-
+        await DataStore.save(
+          new Todo({
+            todo: newTodo.value
+          })
+        )
         newTodo.value = ''
+        updateTodoList()
       } else {
         emit('badValue')
       }
     }
 
-    const deleteTodo = (id) => {
+    const deleteTodo = async(id) => {
       if (id) {
-        fetch(`http://localhost:3000/todos/${id}`, { method: 'DELETE' })
-        .then(() => todos.value = todos.value.filter((todo) => todo.id != id)) // Notice here we use a different approach by updating the local list. This avoids reloading the page.
-        .catch(err => console.log(err))
+        const modelToDelete = await DataStore.query(Todo, id);
+        DataStore.delete(modelToDelete);
+        updateTodoList()
       }
     }
 
     return { newTodo, addTodo, todos, deleteTodo }
-  },
+  }
 }
 </script>
 
