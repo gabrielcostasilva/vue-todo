@@ -1,18 +1,13 @@
 <template>
-<amplify-auth-container>
-  <amplify-authenticator>
+  <authenticator :sign-up-attributes="['username', 'email', 'name']">
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+      <router-link to="/contact">Contact</router-link>
+    </div>
 
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/contact">Contact</router-link>
-  </div>
-  <router-view />
-
-    <amplify-sign-out></amplify-sign-out>
-  </amplify-authenticator>
-</amplify-auth-container>
-
+    <router-view />
+  </authenticator>
 </template>
 
 <style>
