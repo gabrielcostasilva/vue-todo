@@ -2,27 +2,16 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 
-import { Amplify, Auth } from 'aws-amplify';
-
-// import { 
-//     applyPolyfills,
-//     defineCustomElements
-//   } from '@aws-amplify/ui-components/loader';
-  
+import { Amplify, Auth } from 'aws-amplify';  
 
 Amplify.configure({
     Auth: {
-        region: 'us-east-1',
-        userPoolId: 'us-east-1_0AifnDPgu',
-        userPoolWebClientId: '2omkf239lb44dkcvkq5s76f30k',
+        region: process.env.VUE_APP_REGION,
+        userPoolId: process.env.VUE_APP_USER_POOL_ID,
+        userPoolWebClientId: process.env.VUE_APP_USER_POOL_WEB_CLIENT_ID,
     }
 });
-
-// applyPolyfills().then(() => {
-//     defineCustomElements(window);
-//   });
   
 const app = createApp(App)
 
-// app.config.isCustomElement = tag => tag.startsWith('amplify-');
 app.use(router).mount('#app')

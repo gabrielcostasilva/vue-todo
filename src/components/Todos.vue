@@ -21,11 +21,16 @@
 <script>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { Auth } from 'aws-amplify';
 
 export default {
   setup(props, { emit }) {
     const todos = ref([])
     const router = useRouter()
+
+    const currentUsername = ref('nono')
+    Auth.currentAuthenticatedUser().then(userAttrs => currentUsername.value = userAttrs['username']);
+
     onMounted(() => {
       fetch('https://m2rdohbwlf.execute-api.us-east-1.amazonaws.com/prod/todos', {
         headers: {'Origin': '*'}
@@ -41,7 +46,7 @@ export default {
         fetch('https://m2rdohbwlf.execute-api.us-east-1.amazonaws.com/prod/todos', {
           method: 'POST',
           headers: { 'Content-type': 'application/json', 'Origin': '*' },
-          body: JSON.stringify({ text: newTodo.value }),
+          body: JSON.stringify({ text: newTodo.value, userId: currentUsername.value }),
         })
           .then(() => router.go()) // Notice we are forcing a reload here. Perhaps, not the best approach ...
           .catch((err) => console.log(err))

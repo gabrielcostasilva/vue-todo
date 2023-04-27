@@ -6,20 +6,15 @@
     <router-link to="/about">About</router-link> |
     <router-link to="/contact">Contact</router-link>
   </div>
+  
   <router-view />
-
-    <amplify-sign-out></amplify-sign-out>
   
   </authenticator>
 </template>
 
 <script setup>
 import { Authenticator } from "@aws-amplify/ui-vue";
-import { Auth } from 'aws-amplify';
 import "@aws-amplify/ui-vue/styles.css";
-
-Auth.currentAuthenticatedUser().then(userAttrs => console.log(userAttrs['username']));
-
 </script>
 
 <style>
