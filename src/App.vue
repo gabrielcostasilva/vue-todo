@@ -1,6 +1,5 @@
 <template>
-<amplify-auth-container>
-  <amplify-authenticator>
+  <authenticator :sign-up-attributes="['given_name']">
 
   <div id="nav">
     <router-link to="/">Home</router-link> |
@@ -10,10 +9,18 @@
   <router-view />
 
     <amplify-sign-out></amplify-sign-out>
-  </amplify-authenticator>
-</amplify-auth-container>
-
+  
+  </authenticator>
 </template>
+
+<script setup>
+import { Authenticator } from "@aws-amplify/ui-vue";
+import { Auth } from 'aws-amplify';
+import "@aws-amplify/ui-vue/styles.css";
+
+Auth.currentAuthenticatedUser().then(userAttrs => console.log(userAttrs['username']));
+
+</script>
 
 <style>
 body {

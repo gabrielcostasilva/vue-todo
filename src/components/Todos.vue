@@ -19,30 +19,44 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
 export default {
   setup(props, { emit }) {
-    const todos = ref([
-      { text: 'make the bed', id: 1 },
-      { text: 'play video games', id: 2 },
-    ])
-
+    const todos = ref([])
+    const router = useRouter()
+    onMounted(() => {
+      fetch('https://m2rdohbwlf.execute-api.us-east-1.amazonaws.com/prod/todos', {
+        headers: {'Origin': '*'}
+      })
+        .then((response) => response.json())
+        .then((data) => (todos.value = data.todos))
+        .catch((err) => console.log('Error!'))
+    })
     const newTodo = ref('')
-
     const addTodo = () => {
       if (newTodo.value) {
-        const id = Math.random()
-        todos.value = [{ text: newTodo.value, id }, ...todos.value]
+        
+        fetch('https://m2rdohbwlf.execute-api.us-east-1.amazonaws.com/prod/todos', {
+          method: 'POST',
+          headers: { 'Content-type': 'application/json', 'Origin': '*' },
+          body: JSON.stringify({ text: newTodo.value }),
+        })
+          .then(() => router.go()) // Notice we are forcing a reload here. Perhaps, not the best approach ...
+          .catch((err) => console.log(err))
         newTodo.value = ''
       } else {
         emit('badValue')
       }
     }
-
     const deleteTodo = (id) => {
-      todos.value = todos.value.filter((todo) => todo.id != id)
+      if (id) {
+        fetch(`https://m2rdohbwlf.execute-api.us-east-1.amazonaws.com/prod/todos/${id}`, { method: 'DELETE' })
+        .then(() => todos.value = todos.value.filter((todo) => todo.id != id)) // Notice here we use a different approach by updating the local list. This avoids reloading the page.
+        .catch(err => console.log(err))
+      }
     }
-
     return { newTodo, addTodo, todos, deleteTodo }
   },
 }
